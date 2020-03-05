@@ -1,0 +1,184 @@
+\documentclass[a4paper,14pt]{extreport} % формат документа
+
+\usepackage{amsmath}
+\usepackage{cmap} % поиск в ПДФ
+\usepackage[T2A]{fontenc} % кодировка
+\usepackage[utf8]{inputenc} % кодировка исходного текста
+\usepackage[english,russian]{babel} % локализация и переносы
+\usepackage[left = 2cm, right = 1cm, top = 2cm, bottom = 2 cm]{geometry} % поля
+\usepackage{listings}
+\usepackage{graphicx} % для вставки рисунков
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{multirow}
+\graphicspath{{pictures/}}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+\newcommand{\anonsection}[1]{\section*{#1}\addcontentsline{toc}{section}{#1}}
+
+\lstset{ %
+	language=Lisp,                % Язык программирования 
+	numbers=left,                   % С какой стороны нумеровать          
+	frame=single,                    % Добавить рамку
+}
+
+\begin{document}
+\begin{titlepage}
+
+    \begin{table}[H]
+        \centering
+        \footnotesize
+        \begin{tabular}{cc}
+            \multirow{8}{*}{\includegraphics[scale=0.35]{bmstu.jpg}}
+            & \\
+            & \\
+            & \textbf{Министерство науки и высшего образования Российской Федерации} \\
+            & \textbf{Федеральное государственное бюджетное образовательное учреждение} \\
+            & \textbf{высшего образования} \\
+            & \textbf{<<Московский государственный технический} \\
+            & \textbf{университет имени Н.Э. Баумана>>} \\
+            & \textbf{(МГТУ им. Н.Э. Баумана)} \\
+        \end{tabular}
+    \end{table}
+
+    \vspace{-2.5cm}
+
+    \begin{flushleft}
+        \rule[-1cm]{\textwidth}{3pt}
+        \rule{\textwidth}{1pt}
+    \end{flushleft}
+
+    \begin{flushleft}
+        \small
+        ФАКУЛЬТЕТ
+        \underline{<<Информатика и системы управления>>\ \ \ \ \ \ \ 
+        \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 
+    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ } \\
+        КАФЕДРА
+        \underline{<<Программное обеспечение ЭВМ и
+        информационные технологии>>
+        \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+    \end{flushleft}
+
+    \vspace{2cm}
+
+    \begin{center}
+        \textbf{Лабораторная работа № 6} \\
+        \vspace{0.5cm}
+        \textbf{Рекурсивные функции.  } \\
+    \end{center}
+
+    \vspace{4cm}
+
+    \begin{flushleft}
+        \begin{tabular}{ll}
+            \textbf{Дисциплина} & Функциональное и логическое программирование \\
+            \textbf{Студент} & Сиденко А.Г. \\
+            \textbf{Группа} & ИУ7-63Б \\
+            \textbf{Преподаватель} & Толпинская Н.Б.  \\
+        \end{tabular}
+    \end{flushleft}
+
+    \vspace{4cm}
+
+   \begin{center}
+        Москва, 2020 г.
+    \end{center}
+
+\end{titlepage}
+
+\begin{enumerate}
+\item \textbf{Написать функцию, которая переводит температуру в системе Фаренгейта в температуру по Цельсию}
+
+\begin{lstlisting}
+(defun f-to-c (temp)
+  (* (/ 5 9) (- temp 32.0)) )
+  
+(write (f-to-c 451)) 
+\end{lstlisting}
+
+Результат: 232.77779
+
+\item \textbf{Что получится при вычисления каждого из выражений?}
+
+\begin{lstlisting}
+(list 'cons t NIL)
+; (CONS T NIL)
+\end{lstlisting}
+Создает 3 списковых ячейки, возвращает список
+
+\begin{lstlisting}
+(eval (eval (list 'cons t NIL)))
+; Undefined function:  T
+\end{lstlisting}
+EVAL -- позволяет вычислять значения выражений, представленных в виде списков. 
+
+\begin{lstlisting}
+(apply #cons ''(t NIL))
+; illegal complex number format: #CONS
+\end{lstlisting}
+Знак решётки обозначает начало сложной синтаксической конструкции (числа в различных системах счисления).
+
+\begin{lstlisting}
+(list 'eval NIL)
+; (EVAL NIL)
+\end{lstlisting}
+
+\begin{lstlisting}
+(eval (list 'cons t NIL))
+; (T)
+\end{lstlisting}
+EVAL аннулирует кавычку
+
+\begin{lstlisting}
+(eval NIL)
+; NIL
+\end{lstlisting}
+
+\begin{lstlisting}
+(eval (list 'eval NIL))
+; NIL
+\end{lstlisting}
+
+\item \textbf{Написать функцию, вычисляющую катет по заданной гипотенузе и другому катету прямоугольного треугольника, и составить диаграмму ее вычисления.}
+
+\begin{lstlisting}
+(defun cathet (cat hyp)
+  (sqrt (- (* hyp hyp) (* cat cat))) )
+
+(write (cathet 3 5))
+\end{lstlisting}
+
+Результат: 4.0
+
+\hfill
+
+\hfill
+
+\hfill
+
+\hfill
+
+\hfill
+
+\hfill
+
+\hfill
+
+\hfill
+
+\hfill
+
+
+\item \textbf{Написать функцию, вычисляющую площадь трапеции по ее основаниям и высоте, и составить диаграмму ее вычисления.}
+
+\begin{lstlisting}
+(defun square_trap (a b h)
+  (* (/ (+ a b) 2) h) 
+
+(write (square_trap 2 2 2))
+\end{lstlisting}
+
+Результат: 4
+
+\end{enumerate}
+\end{document}
