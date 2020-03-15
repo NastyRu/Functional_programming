@@ -1,5 +1,7 @@
 # Functional_programming
 
+Learning course at 6th semester of BMSTU (2020)
+
 ## Lab 1, 2
 **Списки в Lispe. Использование стандартных функций.**
 
