@@ -1,0 +1,144 @@
+\documentclass[a4paper,14pt]{extreport} % формат документа
+
+\usepackage{amsmath}
+\usepackage{cmap} % поиск в ПДФ
+\usepackage[T2A]{fontenc} % кодировка
+\usepackage[utf8]{inputenc} % кодировка исходного текста
+\usepackage[english,russian]{babel} % локализация и переносы
+\usepackage[left = 2cm, right = 1cm, top = 2cm, bottom = 2 cm]{geometry} % поля
+\usepackage{listings}
+\usepackage{graphicx} % для вставки рисунков
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{multirow}
+\graphicspath{{pictures/}}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+\newcommand{\anonsection}[1]{\section*{#1}\addcontentsline{toc}{section}{#1}}
+
+\lstset{ %
+	language=Lisp,                % Язык программирования 
+	numbers=left,                   % С какой стороны нумеровать          
+	frame=single,                    % Добавить рамку
+}
+
+\begin{document}
+\begin{titlepage}
+
+    \begin{table}[H]
+        \centering
+        \footnotesize
+        \begin{tabular}{cc}
+            \multirow{8}{*}{\includegraphics[scale=0.35]{bmstu.jpg}}
+            & \\
+            & \\
+            & \textbf{Министерство науки и высшего образования Российской Федерации} \\
+            & \textbf{Федеральное государственное бюджетное образовательное учреждение} \\
+            & \textbf{высшего образования} \\
+            & \textbf{<<Московский государственный технический} \\
+            & \textbf{университет имени Н.Э. Баумана>>} \\
+            & \textbf{(МГТУ им. Н.Э. Баумана)} \\
+        \end{tabular}
+    \end{table}
+
+    \vspace{-2.5cm}
+
+    \begin{flushleft}
+        \rule[-1cm]{\textwidth}{3pt}
+        \rule{\textwidth}{1pt}
+    \end{flushleft}
+
+    \begin{flushleft}
+        \small
+        ФАКУЛЬТЕТ
+        \underline{<<Информатика и системы управления>>\ \ \ \ \ \ \ 
+        \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 
+    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ } \\
+        КАФЕДРА
+        \underline{<<Программное обеспечение ЭВМ и
+        информационные технологии>>
+        \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+    \end{flushleft}
+
+    \vspace{2cm}
+
+    \begin{center}
+        \textbf{Лабораторная работа № 7} \\
+        \vspace{0.5cm}
+        \textbf{} \\
+    \end{center}
+
+    \vspace{4cm}
+
+    \begin{flushleft}
+        \begin{tabular}{ll}
+            \textbf{Дисциплина} & Функциональное и логическое программирование \\
+            \textbf{Студент} & Сиденко А.Г. \\
+            \textbf{Группа} & ИУ7-63Б \\
+            \textbf{Преподаватель} & Толпинская Н.Б.  \\
+        \end{tabular}
+    \end{flushleft}
+
+    \vspace{4cm}
+
+   \begin{center}
+        Москва, 2020 г.
+    \end{center}
+
+\end{titlepage}
+
+\begin{enumerate}
+\item \textbf{Написать предикат, который принимает два числа-аргумента и возвращает Т, если первое число не меньше второго.}
+
+\begin{lstlisting}
+(defun eqb (a b)
+  (if (> b a) Nil T) )
+\end{lstlisting}
+
+\item \textbf{Какой из следующих двух вариантов предиката ошибочен и почему?}
+
+\begin{lstlisting}
+(defun pred1 (x)
+  (and (numberp x) (plusp x)))
+
+(defun pred2 (x)
+  (and (plusp x) (numberp x)))
+\end{lstlisting}
+
+Ошибочен второй, так как перед выполнением операции, не делается проверка на число. 
+
+\item \textbf{Переписать функцию how-alike, приведенную в лекции и не пользующую COND, используя конструкция IF, AND/OR.}
+
+\begin{lstlisting}
+(defun how_alike (x y)
+  (cond ((or (= x y) (equal x y)) 'the_same)
+        ((and (oddp x) (oddp y)) 'both_odd)
+        ((and (evenp x) (evenp y)) 'both_even)
+        (T 'difference)) )
+
+(defun how_alike_if (x y)
+  (if (or (= x y) (equal x y)) 'the_same
+        (if (and (oddp x) (oddp y)) 'both_odd
+        (if (and (evenp x) (evenp y)) 'both_even 
+        'difference))) )
+\end{lstlisting}
+
+Результат:
+
+(how$\_$alike 11 30) $\to$ DIFFERENCE
+
+(how$\_$alike$\_$if 11 30) $\to$ DIFFERENCE
+
+(how$\_$alike 3 3) $\to$ THE$\_$SAME
+
+(how$\_$alike$\_$if 3 3) $\to$ THE$\_$SAME
+
+(how$\_$alike 1 3) $\to$ BOTH$\_$ODD
+
+(how$\_$alike$\_$if 1 3) $\to$ BOTH$\_$ODD
+
+(how$\_$alike -2 30) $\to$ BOTH$\_$EVEN
+
+(how$\_$alike$\_$if -2 30) $\to$ BOTH$\_$EVEN
+
+\end{enumerate}
+\end{document}
