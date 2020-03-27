@@ -91,17 +91,20 @@
 
 \begin{lstlisting}
 (defun eqb (a b)
-  (if (> b a) Nil T) )
+  (if (> b a) Nil T)
+)
 \end{lstlisting}
 
 \item \textbf{Какой из следующих двух вариантов предиката ошибочен и почему?}
 
 \begin{lstlisting}
 (defun pred1 (x)
-  (and (numberp x) (plusp x)))
+  (and (numberp x) (plusp x))
+)
 
 (defun pred2 (x)
-  (and (plusp x) (numberp x)))
+  (and (plusp x) (numberp x))
+)
 \end{lstlisting}
 
 Ошибочен второй, так как перед выполнением операции, не делается проверка на число. 
@@ -110,16 +113,23 @@
 
 \begin{lstlisting}
 (defun how_alike (x y)
-  (cond ((or (= x y) (equal x y)) 'the_same)
-        ((and (oddp x) (oddp y)) 'both_odd)
-        ((and (evenp x) (evenp y)) 'both_even)
-        (T 'difference)) )
+  (cond 
+    ((or (= x y) (equal x y)) 'the_same)
+    ((and (oddp x) (oddp y)) 'both_odd)
+    ((and (evenp x) (evenp y)) 'both_even)
+    (T 'difference)
+  ) 
+)
 
 (defun how_alike_if (x y)
   (if (or (= x y) (equal x y)) 'the_same
-        (if (and (oddp x) (oddp y)) 'both_odd
-        (if (and (evenp x) (evenp y)) 'both_even 
-        'difference))) )
+    (if (and (oddp x) (oddp y)) 'both_odd
+      (if (and (evenp x) (evenp y)) 'both_even 
+        'difference
+      )
+    )
+  ) 
+)
 \end{lstlisting}
 
 Результат:
@@ -174,14 +184,18 @@ LIST -- создает столько списковых ячеек, сколь�
 
 \begin{lstlisting}
 (defun last_elem (lst)
-  (if (NULL (cadr lst)) (car lst) (last_elem (cdr lst))) )
+  (if (NULL (cadr lst)) (car lst) 
+    (last_elem (cdr lst))
+  ) 
+)
 \end{lstlisting}
 
 С использованием функционала -- с использованием функционала reduce, возвращая последний полученный результат, а возвращаем каждый раз второй аргумент:
 
 \begin{lstlisting}
 (defun last_elem (lst)
-  (reduce #'(lambda (a x) x) lst))
+  (reduce #'(lambda (a x) x) lst)
+)
 \end{lstlisting}
 
 \item \textbf{Написать, по крайней мере, два варианта функции, которая возвращает свой список-аргумент без последнего элемента.}
@@ -190,14 +204,18 @@ LIST -- создает столько списковых ячеек, сколь�
 
 \begin{lstlisting}
 (defun centr (lst)
-  (mapcar (lambda (x y) y) (cdr lst) lst))
+  (mapcar (lambda (x y) y) (cdr lst) lst)
+)
 \end{lstlisting}
 
 Рекурсивно -- пока хвост не Nil, соединяем с помощью cons голову и возвращаем значение функции от хвоста:
 
 \begin{lstlisting}
 (defun centr (lst)
-  (if (NULL (cadr lst))()(cons (car lst)(centr (cdr lst)))))
+  (if (NULL (cadr lst)) () 
+    (cons (car lst) (centr (cdr lst)))
+  )
+)
 \end{lstlisting}
 
 \item \textbf{Написать простой вариант игры в кости, в котором бросаются две правильные кости. Если сумма выпавших очков равна 7 или 11 -- выигрыш, если выпало (1,1) или (6,6) --- игрок право снова бросить кости, во всех остальных случаях ход переходит ко второму игроку, но запоминается сумма выпавших очков. Если второй игрок не выигрывает абсолютно, то выигрывает тот игрок, у которого больше очков. Результат игры и значения выпавших костей выводить на экран с помощью функции print.}
@@ -210,21 +228,29 @@ LIST -- создает столько списковых ячеек, сколь�
 
 \begin{lstlisting}
 (defun printS (x y s)
-  (print (list x '+ y '= s)))
+  (print (list x '+ y '= s))
+)
 
 (defun analyze (x y)
-  (cond ((and (= 1 x) (= 1 y)) (printS x y (+ x y)) 
-    	      (analyze (+ 1 (random 6)) (+ 1 (random 6))))
-        ((and (= 6 x) (= 6 y)) (printS x y (+ x y))
-    	      (analyze (+ 1 (random 6)) (+ 1 (random 6))))
-        (T (printS x y (+ x y)) (+ x y))) )
+  (cond 
+    ((and (= 1 x) (= 1 y)) (printS x y (+ x y)) 
+        (analyze (+ 1 (random 6)) (+ 1 (random 6))))
+    ((and (= 6 x) (= 6 y)) (printS x y (+ x y))
+        (analyze (+ 1 (random 6)) (+ 1 (random 6))))
+    (T (printS x y (+ x y)) (+ x y))
+  ) 
+)
 
 (defun game ()
   (let ((s1 (analyze (+ 1 (random 6)) (+ 1 (random 6))))
         (s2 (analyze (+ 1 (random 6)) (+ 1 (random 6)))))
-  (cond ((or (= s1 7) (= s1 11) (> s1 s2)) 'you-win)
-        ((or (= s1 7) (= s2 11) (< s1 s2)) 'he-wins)
-        (T 'draw))) )
+    (cond 
+      ((or (= s1 7) (= s1 11) (> s1 s2)) 'you-win)
+      ((or (= s1 7) (= s2 11) (< s1 s2)) 'he-wins)
+      (T 'draw)
+    )
+  )
+)
 \end{lstlisting}
 
 \hfill
