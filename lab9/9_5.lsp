@@ -1,0 +1,18 @@
+(defun first_list (lst)
+  (defun found (lst1 lst2)
+    (or (if (listp lst1) lst1 Nil)
+        (if (listp lst2) lst2 Nil)
+    )
+  )
+  (reduce #'found lst)
+)
+
+(defun first_list_rec (lst)
+  (cond ((null lst) Nil)
+        ((if (listp (car lst)) (car lst)))
+        (t (first_list_rec (cdr lst)))
+  )
+)
+
+(write (first_list '(1 (1) 3)))
+(write (first_list_rec '(1 (2 3 4) (3))))
