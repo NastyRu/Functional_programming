@@ -1,0 +1,495 @@
+\documentclass[a4paper,14pt]{extreport} % формат документа
+
+\usepackage{amsmath}
+\usepackage{cmap} % поиск в ПДФ
+\usepackage[T2A]{fontenc} % кодировка
+\usepackage[utf8]{inputenc} % кодировка исходного текста
+\usepackage[english,russian]{babel} % локализация и переносы
+\usepackage[left = 2cm, right = 1cm, top = 2cm, bottom = 2 cm]{geometry} % поля
+\usepackage{listings}
+\usepackage{graphicx} % для вставки рисунков
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{multirow}
+\graphicspath{{pictures/}}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+\newcommand{\anonsection}[1]{\section*{#1}\addcontentsline{toc}{section}{#1}}
+
+\lstset{ %
+	language=Lisp,                % Язык программирования 
+	numbers=left,                   % С какой стороны нумеровать          
+	frame=single,                    % Добавить рамку
+}
+
+\begin{document}
+\begin{titlepage}
+
+    \begin{table}[H]
+        \centering
+        \footnotesize
+        \begin{tabular}{cc}
+            \multirow{8}{*}{\includegraphics[scale=0.35]{bmstu.jpg}}
+            & \\
+            & \\
+            & \textbf{Министерство науки и высшего образования Российской Федерации} \\
+            & \textbf{Федеральное государственное бюджетное образовательное учреждение} \\
+            & \textbf{высшего образования} \\
+            & \textbf{<<Московский государственный технический} \\
+            & \textbf{университет имени Н.Э. Баумана>>} \\
+            & \textbf{(МГТУ им. Н.Э. Баумана)} \\
+        \end{tabular}
+    \end{table}
+
+    \vspace{-2.5cm}
+
+    \begin{flushleft}
+        \rule[-1cm]{\textwidth}{3pt}
+        \rule{\textwidth}{1pt}
+    \end{flushleft}
+
+    \begin{flushleft}
+        \small
+        ФАКУЛЬТЕТ
+        \underline{<<Информатика и системы управления>>\ \ \ \ \ \ \ 
+        \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 
+    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ } \\
+        КАФЕДРА
+        \underline{<<Программное обеспечение ЭВМ и
+        информационные технологии>>
+        \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+    \end{flushleft}
+
+    \vspace{4cm}
+
+    \begin{center}
+        \textbf{Лабораторная работа № 10} \\
+        \vspace{0.5cm}
+        \textbf{} \\
+    \end{center}
+
+    \vspace{4cm}
+
+    \begin{flushleft}
+        \begin{tabular}{ll}
+            \textbf{Дисциплина} & Функциональное и логическое программирование \\
+            \textbf{Студент} & Сиденко А.Г. \\
+            \textbf{Группа} & ИУ7-63Б \\
+            \textbf{Преподаватель} & Толпинская Н.Б., Строганов Ю.В.  \\
+        \end{tabular}
+    \end{flushleft}
+
+    \vspace{4cm}
+
+   \begin{center}
+        Москва, 2020 г.
+    \end{center}
+
+\end{titlepage}
+
+\begin{enumerate}
+\item \textbf{Пусть list-of-list список, состоящий из списков. Написать функцию, которая вычисляет сумму длин всех элементов list-of-list.}
+
+На вход список. 
+
+Пока список ненулевой прибавляем к длине головы функцию от хвоста (вернет длину хвоста). Когда дойдет до конца функция вернет 0. 
+
+\begin{lstlisting}
+(defun len_lists(lst)
+  (if lst
+    (+ (length (car lst)) (len_lists (cdr lst)))
+    0
+  )
+)
+\end{lstlisting}
+
+\textbf{Примеры:}
+
+\begin{lstlisting}
+(len_lists '((4 44 3 2 ) (2 3 4) (6)))
+\end{lstlisting}
+
+Результат: 8
+
+\item \textbf{Написать рекурсивную версию (с именем reс-add) вычисления суммы чисел заданного списка.}
+
+На вход список. 
+
+Идея та же, что и в предыдущем номере, только прибавляем не длину, а само значение. 
+
+\begin{lstlisting}
+(defun rec-add(lst)
+  (if lst
+    (+ (car lst) (rec-add (cdr lst)))
+    0
+  )
+)
+\end{lstlisting}
+
+\textbf{Примеры: }
+
+\begin{lstlisting}
+(rec-add '(1 2 3 4 5))
+\end{lstlisting}
+
+Результат: 15
+
+\item \textbf{Написать рекурсивную версию с именем recnth функции nth.}
+
+На вход список и число(позиция). 
+
+Функция recnth, вызывает рекурсивную функцию recnth$\_$next с параметрами список и число (длина списка, который должен остаться), которая как раз в свою очередь и находит необходимую нам позицию в списке. 
+
+\begin{lstlisting}
+(defun recnth_next(lst k)
+  (cond
+    ((= k (length lst)) (car lst))
+    (t (recnth_next (cdr lst) k))
+  )
+)
+
+(defun recnth(lst k)
+  (cond
+    ((> k (length lst)) Nil)
+    ((< k 1) Nil)
+    (t (recnth_next lst (+ 1 (- (length lst) k))))
+  )
+)
+\end{lstlisting}
+
+\textbf{Примеры:}
+
+\begin{lstlisting}
+(recnth '(1 2 3 4 5) 6)
+\end{lstlisting}
+
+Результат: Nil
+
+\begin{lstlisting}
+(recnth '(1 (2 1) (3 4 5) 4 5) 3)
+\end{lstlisting}
+
+Результат: (3 4 5)
+
+\item \textbf{Написать рекурсивную функцию alloddr, которая возвращает t когда все элементы списка нечетные.}
+
+На вход список. 
+
+Пока список ненулевой применяем and к проверки на четность головы и функции от хвоста (вернет t или Nil хвоста). Когда дойдет до конца функция вернет t. 
+
+\begin{lstlisting}
+(defun alloddr(lst)
+  (if lst
+    (and (oddp (car lst)) (alloddr (cdr lst)))
+    t
+  )
+)
+\end{lstlisting}
+
+\textbf{Примеры:}
+
+\begin{lstlisting}
+(alloddr '(1 3 5 7 9))
+\end{lstlisting}
+
+Результат: T
+
+\begin{lstlisting}
+(alloddr '(1 2 3 4 5))
+\end{lstlisting}
+
+Результат: Nil
+
+\item \textbf{Написать рекурсивную функцию, относящуюся к хвостовой рекурсии с одним тестом завершения, которая возвращает последний элемент списка-аргумента.}
+
+Пока второй элемент не Nil идем дальше, иначе возвращаем голову
+ 
+\begin{lstlisting}
+(defun last_elem (lst)
+  (if (NULL (cadr lst)) (car lst) 
+    (last_elem (cdr lst))
+  ) 
+)
+\end{lstlisting}
+
+\textbf{Примеры:}
+
+\begin{lstlisting}
+(last_elem '((1) (2 4 5) (3 4 5 (6 7)) (4 (-3) 8)))
+\end{lstlisting}
+
+Результат: (4 (-3) 8)
+
+\item \textbf{Написать рекурсивную функцию, относящуюся к дополняемой рекурсии с одним тестом завершения, которая вычисляет сумму всех чисел от 0 до n-ого аргумента функции. Вариант: 1) от n-аргумента функции до последнего; 2) от n-аргумента функции до m-аргумента с шагом d. }
+
+Дополняемая рекурсия, считающая сумму всех чисел от 0 до n-ого аргумента. Используем дополнительную функцию, так как необходимо преобразовать индекс к длине хвоста. Далее просто прибавляются все числа, пока длина хвоста длиннее аргумента. 
+
+На вход список и число, порядок аргумента. 
+
+\begin{lstlisting}
+(defun sum_next(lst n)
+  (cond
+    ((= n (length lst)) (car lst))
+    (t (+ (car lst) (sum_next (cdr lst) n)))
+  )
+)
+
+(defun sumN(lst n)
+  (sum_next lst (+ 1 (- (length lst) n)))
+)
+\end{lstlisting}
+
+\textbf{Примеры:}
+
+\begin{lstlisting}
+(sumN '(1 2 3 4 5 6 7) 5)
+\end{lstlisting}
+
+Результат: 15
+
+Дополняемая рекурсия, считающая сумму всех чисел от n-ого аргумента до конца. Используем дополнительную функцию, так как необходимо преобразовать индекс к длине хвоста. Далее просто прибавляются все числа, пропускаются те элементы, где длина хвоста длиннее, прибавляем голову, где длина хвоста равна аргументу и далее до конца (длина равна 1). 
+
+На вход список и число, порядок аргумента. 
+
+\begin{lstlisting}
+(defun sum_nextlast(lst n)
+  (cond
+    ((= 1 (length lst)) (car lst))
+    ((>= n (length lst)) (+ (car lst) 
+    	(sum_nextlast (cdr lst) n))
+    )
+    (t (sum_nextlast (cdr lst) n))
+  )
+)
+
+(defun sumlastN(lst n)
+  (sum_nextlast lst (+ 1 (- (length lst) n)))
+)
+\end{lstlisting}
+
+\textbf{Примеры:}
+
+\begin{lstlisting}
+(sumlastN '(1 2 3 4 5 6 7) 5)
+\end{lstlisting}
+
+Результат: 18
+
+Дополняемая рекурсия, считающая сумму всех чисел от n-ого аргумента до m-го с шагом d. Используем дополнительную функцию, так как необходимо преобразовать индекс к длине хвоста. Далее просто прибавляются все числа, пропускаются те элементы, где длина хвоста длиннее n, прибавляем голову, где длина хвоста равна n  и далее до m, причем прибавляются только числа позиция которых кратна шагу. 
+
+На вход список и 3 числа, порядок аргументов и шаг. 
+
+\begin{lstlisting}
+(defun sum_nextNMD(lst n m d)
+  (let ((len (length lst)))
+    (cond
+      ((= m len)
+        (if (= 0 (rem (- n m) 3))
+          (car lst)
+          0
+        )
+      )
+      ((and (>= n len) (= 0 (rem (- n len) 3)))
+        (+ (car lst) (sum_nextNMD (cdr lst) n m d))
+      )
+      (t
+        (sum_nextNMD (cdr lst) n m d)
+      )
+    )
+  )
+)
+
+(defun sumNMD(lst n m d)
+  (let ((len (length lst)))
+    (sum_nextNMD lst (+ 1 (- len n)) (+ 1 (- len m)) d)
+  )
+)
+\end{lstlisting}
+
+\textbf{Примеры:}
+
+\begin{lstlisting}
+(sumNMD '(1 2 3 4 5 6 7 8 9 10) 2 9 3)
+\end{lstlisting}
+
+Результат: 15
+
+\item \textbf{Написать рекурсивную функцию, которая возвращает последнее нечетное число из числового списка, возможно создавая некоторые вспомогательные функции.}
+
+Рекурсивная функция: список пустой, возвращает Nil; если число четное -- возвращается значение рекурсии, если нечетное -- проверяется, что вернула рекурсия, если вернула не Nil(было найдено нечетное число), то возвращается ранее найденное число(оно будет в списке позже); если вернула Nil то возвращается само нечетное число. 
+
+На вход список. 
+
+\begin{lstlisting}
+(defun last_odd (lst)
+  (cond ((null lst) Nil)
+        ((oddp (car lst))
+          (let ((rec (last_odd (cdr lst))))
+            (if (null rec) (car lst) rec)
+          )
+        )
+        (t (last_odd (cdr lst)))
+  )
+)
+\end{lstlisting}
+
+\textbf{Примеры:}
+
+\begin{lstlisting}
+(last_odd '(1 2 3 4 5 6 7))
+\end{lstlisting}
+
+Результат: 7
+
+\item \textbf{Используя cons-дополняемую рекурсию с одним тестом завершения, написать функцию которая получает как аргумент список чисел, а возвращает список квадратов этих чисел в том же порядке.}
+
+Пока список не Nil, объединяем все числа в списке, возведенные в квадрат. 
+
+На вход список. 
+
+\begin{lstlisting}
+(defun square (lst)
+  (if lst
+    (cons
+      (* (car lst) (car lst))
+      (square (cdr lst))
+    )
+  )
+)
+\end{lstlisting}
+
+\textbf{Примеры:}
+
+\begin{lstlisting}
+(square '(1 -2 3 4 5))
+\end{lstlisting}
+
+Результат: (1 4 9 16 25)
+
+\item \textbf{Написать функцию с именем select-odd, которая из заданного списка выбирает все нечетные числа. (Вариант 1: select-even, вариант 2: вычисляет сумму всех нечетных чисел(sum-all-odd) или сумму всех четных чисел (sum-all-even) из заданного списка. )}
+
+На вход список. 
+
+Пока список не Nil (каждый раз функция применяется для хвоста списка), ищутся все нечетные числа и создается список. 
+
+\begin{lstlisting}
+(defun select_odd (lst)
+  (if lst
+    (append
+      (if (oddp (car lst))
+      	(list (car lst)) Nil
+      )
+      (select_odd (cdr lst))
+    )
+  )
+)
+\end{lstlisting}
+
+\textbf{Примеры:}
+
+\begin{lstlisting}
+(select_odd '(1 2 3 4 5 6 7))
+\end{lstlisting}
+
+Результат: (1 3 5 7)
+
+Пока список не Nil (каждый раз функция применяется для хвоста списка), ищутся все четные числа и создается список. 
+
+\begin{lstlisting}
+(defun select_even (lst)
+  (if lst
+    (append
+      (if (evenp (car lst))
+      	(list (car lst)) Nil
+      )
+      (select_even (cdr lst))
+    )
+  )
+)
+\end{lstlisting}
+
+\textbf{Примеры:}
+
+\begin{lstlisting}
+(select_even '(1 2 3 4 5 6 7))
+\end{lstlisting}
+
+Результат: (2 4 6)
+
+Пока список не Nil (каждый раз функция применяется для хвоста списка), ищутся все нечетные числа и считается их сумма. 
+
+\begin{lstlisting}
+(defun sum_all_odd (lst)
+  (cond ((null lst) 0)
+        ((oddp (car lst))
+          (+ (car lst) (sum_all_odd (cdr lst)))
+        )
+        (t (sum_all_odd (cdr lst)))
+  )
+)
+\end{lstlisting}
+
+\textbf{Примеры:}
+
+\begin{lstlisting}
+(sum_all_odd '(1 2 3 4 5 6 7))
+\end{lstlisting}
+
+Результат: 16
+
+Пока список не Nil (каждый раз функция применяется для хвоста списка), ищутся все четные числа и считается их сумма. 
+
+\begin{lstlisting}
+(defun sum_all_even (lst)
+  (cond ((null lst) 0)
+        ((evenp (car lst))
+          (+ (car lst) (sum_all_even (cdr lst)))
+        )
+        (t (sum_all_even (cdr lst)))
+  )
+)
+\end{lstlisting}
+
+\textbf{Примеры:}
+
+\begin{lstlisting}
+(sum_all_even '(1 2 3 4 5 6 7))
+\end{lstlisting}
+
+Результат: 12
+
+\end{enumerate}
+
+\textbf{Теоретические вопросы:}
+
+\begin{enumerate}
+\item Способы организации повторных вычислений в Lisp. 
+
+Использование функционалов или рекурсии. 
+
+\item Что такое рекурсия? Классификация рекурсивных функций в Lisp. 
+
+Рекурсия -- это ссылка на определяемый объект во время его определения. 
+
+\begin{enumerate}
+\item Простая рекурсия -- один рекурсивный вызов в теле. 
+\item Рекурсия первого порядка -- рекурсивный вызов встречается несколько раз. 
+\item Взаимная рекурсия -- используется несколько функций, рекурсивно вызывающих друг друга.
+\end{enumerate}
+
+\item Различные способы организации рекурсивных функций и порядок их реализации. 
+
+\begin{enumerate}
+\item Хвостовая рекурсия -- результат формируется не на выходе из рекурсии, а на входе в рекурсию, все действия выполняя до ухода на следующий шаг рекурсии. 
+\item Рекурсия по нескольким параметрам
+\item Дополняемая рекурсия -- при обращении к рекурсивной функции используется дополнительная функция не в аргументе вызова, а вне его
+\item Множественная рекурсия -- на одной ветке происходит сразу несколько рекурсивных вызовов.
+\end{enumerate}
+
+\item Способы повышения эффективности реализации рекурсии. 
+
+Использование хвостовой рекурсии. Если условий выхода несколько, то надо думать о порядке их следования. Некачественный выход из рекурсии может привести к переполнению памяти из-за "лишних" рекурсивных вызовов. 
+
+Преобразование не хвостовой рекурсии в хвостовую, возможно путем использования дополнительных параметров. В этом случае необходимо использовать функцию-оболочку для запуска рекурсивной функции с начальными значениями дополнительных параметров. 
+
+\end{enumerate}
+\end{document}
